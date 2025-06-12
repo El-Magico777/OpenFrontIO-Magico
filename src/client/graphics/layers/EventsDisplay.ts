@@ -11,7 +11,6 @@ import {
   UnitType,
 } from "../../../core/game/Game";
 import {
-  AllianceExpiredUpdate,
   AllianceExtensionPromptUpdate,
   AllianceRequestReplyUpdate,
   AllianceRequestUpdate,
@@ -29,7 +28,6 @@ import {
   CancelBoatIntentEvent,
   SendAllianceExtensionIntentEvent,
   SendAllianceReplyIntentEvent,
-  SendAllianceRequestIntentEvent,
 } from "../../Transport";
 import { Layer } from "./Layer";
 
@@ -99,7 +97,6 @@ export class EventsDisplay extends LitElement implements Layer {
     [GameUpdateType.TargetPlayer, (u) => this.onTargetPlayerEvent(u)],
     [GameUpdateType.Emoji, (u) => this.onEmojiMessageEvent(u)],
     [GameUpdateType.UnitIncoming, (u) => this.onUnitIncomingEvent(u)],
-    [GameUpdateType.AllianceExpired, (u) => this.onAllianceExpiredEvent(u)],
     [
       GameUpdateType.AllianceExtensionPrompt,
       (u) => this.onAllianceExtensionPromptEvent(u),
@@ -383,49 +380,6 @@ export class EventsDisplay extends LitElement implements Layer {
         focusID: update.traitorID,
       });
     }
-  }
-
-  onAllianceExpiredEvent(update: AllianceExpiredUpdate) {
-    const myPlayer = this.game.myPlayer();
-    if (!myPlayer) return;
-
-    const otherID =
-      update.player1ID === myPlayer.smallID()
-        ? update.player2ID
-        : update.player2ID === myPlayer.smallID()
-          ? update.player1ID
-          : null;
-
-    if (!otherID) return;
-
-    const other = this.game.playerBySmallID(otherID) as PlayerView;
-    if (!other || !myPlayer.isAlive() || !other.isAlive()) return;
-
-    this.addEvent({
-      description: `Your alliance with ${other.name()} expired`,
-      type: MessageType.WARN,
-      tags: ["alliance" + otherID],
-      duration: 100,
-      buttons: [
-        {
-          text: "Focus",
-          className: "btn-gray",
-          action: () => this.eventBus.emit(new GoToPlayerEvent(other)),
-          preventClose: true,
-        },
-        {
-          text: "Propose to renew",
-          className: "btn",
-          action: () =>
-            this.eventBus.emit(
-              new SendAllianceRequestIntentEvent(myPlayer, other),
-            ),
-        },
-      ],
-      highlight: true,
-      createdAt: this.game.ticks(),
-      focusID: otherID,
-    });
   }
 
   onAllianceExtensionPromptEvent(update: AllianceExtensionPromptUpdate) {
