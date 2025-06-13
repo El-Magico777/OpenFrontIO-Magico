@@ -414,7 +414,9 @@ export class EventsDisplay extends LitElement implements Layer {
         description: `${recipient.name()} ${
           update.accepted ? "accepted" : "rejected"
         } your alliance request`,
-        type: update.accepted ? MessageType.SUCCESS : MessageType.ERROR,
+        type: update.accepted
+          ? MessageType.ALLIANCE_ACCEPTED
+          : MessageType.ALLIANCE_REJECTED,
         highlight: true,
         createdAt: this.game.ticks(),
         focusID: update.request.recipientID,
