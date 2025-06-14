@@ -10,11 +10,12 @@ import { TileRef } from "../game/GameMap";
 import { PseudoRandom } from "../PseudoRandom";
 import { SAMMissileExecution } from "./SAMMissileExecution";
 
+export const SAM_SEARCH_RADIUS = 80;
 export class SAMLauncherExecution implements Execution {
   private mg: Game;
   private active: boolean = true;
 
-  private searchRangeRadius = 80;
+  private searchRangeRadius = SAM_SEARCH_RADIUS;
   private targetRangeRadius = 120; // Nuke's target should be in this range to be focusable
   // As MIRV go very fast we have to detect them very early but we only
   // shoot the one targeting very close (MIRVWarheadProtectionRadius)
@@ -123,6 +124,7 @@ export class SAMLauncherExecution implements Execution {
 
     if (this.player !== this.sam.owner()) {
       this.player = this.sam.owner();
+      this.sam.touch();
     }
 
     if (this.pseudoRandom === undefined) {

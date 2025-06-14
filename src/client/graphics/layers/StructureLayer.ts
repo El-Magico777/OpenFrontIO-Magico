@@ -1,6 +1,7 @@
 import { colord, Colord } from "colord";
 import { Theme } from "../../../core/configuration/Config";
 import { EventBus } from "../../../core/EventBus";
+import { SAM_SEARCH_RADIUS } from "../../../core/execution/SAMLauncherExecution";
 import { MouseUpEvent } from "../../InputHandler";
 import { TransformHandler } from "../TransformHandler";
 import { Layer } from "./Layer";
@@ -273,6 +274,9 @@ export class StructureLayer implements Layer {
     }
 
     if (!unit.isActive()) return;
+    if (unitType === UnitType.SAMLauncher && unit.isActive()) {
+      this.drawSAMSearchRadius(unit, SAM_SEARCH_RADIUS);
+    }
 
     if (this.selectedStructureUnit === unit) {
       borderColor = selectedUnitColor;
@@ -414,5 +418,22 @@ export class StructureLayer implements Layer {
       this.selectedStructureUnit = null;
       this.handleUnitRendering(this.previouslySelected);
     }
+  }
+
+  private drawSAMSearchRadius(unit: UnitView, radius: number) {
+    const tile = unit.tile();
+    const x = this.game.x(tile) * 2;
+    const y = this.game.y(tile) * 2;
+    const context = this.context;
+    const color = this.theme.borderColor(unit.owner()).alpha(0.5);
+
+    context.save();
+    context.beginPath();
+    context.setLineDash([4, 16]);
+    context.strokeStyle = color.toRgbString();
+    context.lineWidth = 2.5;
+    context.arc(x, y, radius, 0, 2 * Math.PI);
+    context.stroke();
+    context.restore();
   }
 }
