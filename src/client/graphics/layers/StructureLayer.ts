@@ -1,7 +1,7 @@
 import { colord, Colord } from "colord";
 import { Theme } from "../../../core/configuration/Config";
 import { EventBus } from "../../../core/EventBus";
-import { SAM_SEARCH_RADIUS } from "../../../core/execution/SAMLauncherExecution";
+import { SAM_TARGET_RADIUS } from "../../../core/execution/SAMLauncherExecution";
 import { MouseUpEvent } from "../../InputHandler";
 import { TransformHandler } from "../TransformHandler";
 import { Layer } from "./Layer";
@@ -273,9 +273,14 @@ export class StructureLayer implements Layer {
       this.clearCell(new Cell(this.game.x(tile), this.game.y(tile)));
     }
 
+    if (unitType === UnitType.SAMLauncher) {
+      this.clearSAMSearchRadius(unit, SAM_TARGET_RADIUS);
+    }
+
     if (!unit.isActive()) return;
+
     if (unitType === UnitType.SAMLauncher && unit.isActive()) {
-      this.drawSAMSearchRadius(unit, SAM_SEARCH_RADIUS);
+      this.drawSAMSearchRadius(unit, SAM_TARGET_RADIUS);
     }
 
     if (this.selectedStructureUnit === unit) {
@@ -435,5 +440,14 @@ export class StructureLayer implements Layer {
     context.arc(x, y, radius, 0, 2 * Math.PI);
     context.stroke();
     context.restore();
+  }
+
+  private clearSAMSearchRadius(unit: UnitView, radius: number) {
+    const tile = unit.tile();
+    const x = this.game.x(tile) * 2;
+    const y = this.game.y(tile) * 2;
+    const size = (radius + 2) * 2;
+
+    this.context.clearRect(x - radius - 2, y - radius - 2, size, size);
   }
 }
