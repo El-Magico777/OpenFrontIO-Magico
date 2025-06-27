@@ -1,7 +1,21 @@
+import { BuildUnitIntentEvent } from "../client/Transport";
 import { EventBus, GameEvent } from "../core/EventBus";
+import { Cell, UnitType } from "../core/game/Game";
 import { UnitView } from "../core/game/GameView";
 import { UserSettings } from "../core/game/UserSettings";
 import { ReplaySpeedMultiplier } from "./utilities/ReplaySpeedMultiplier";
+
+const HOTKEY_UNIT_MAP: Record<string, UnitType> = {
+  buildCity: UnitType.City,
+  buildHarbor: UnitType.Port,
+  buildWarship: UnitType.Warship,
+  buildDefence: UnitType.DefensePost,
+  buildSilo: UnitType.MissileSilo,
+  buildSAM: UnitType.SAMLauncher,
+  buildNuke: UnitType.AtomBomb,
+  buildHyperbomb: UnitType.HydrogenBomb,
+  buildMIRV: UnitType.MIRV,
+};
 
 export class MouseUpEvent implements GameEvent {
   constructor(
@@ -117,10 +131,21 @@ export class InputHandler {
 
   private userSettings: UserSettings = new UserSettings();
 
+  private clientGameRunner: any = null;
+
   constructor(
     private canvas: HTMLCanvasElement,
     private eventBus: EventBus,
-  ) {}
+    clientGameRunner?: any,
+  ) {
+    if (clientGameRunner) {
+      this.clientGameRunner = clientGameRunner;
+    }
+  }
+
+  public setClientGameRunner(clientGameRunner: any) {
+    this.clientGameRunner = clientGameRunner;
+  }
 
   initialize() {
     this.keybinds = {
@@ -287,6 +312,26 @@ export class InputHandler {
         e.preventDefault();
         this.eventBus.emit(new CenterCameraEvent());
       }
+
+      Object.entries(HOTKEY_UNIT_MAP).forEach(([action, unitType]) => {
+        if (e.code === this.keybinds[action]) {
+          e.preventDefault();
+
+          const tile = this.clientGameRunner.getTileUnderCursor?.();
+
+          if (
+            tile &&
+            typeof tile.x === "number" &&
+            typeof tile.y === "number"
+          ) {
+            this.eventBus.emit(
+              new BuildUnitIntentEvent(unitType, new Cell(tile.x, tile.y)),
+            );
+          } else {
+            // console.warn("No tile.");
+          }
+        }
+      });
 
       this.activeKeys.delete(e.code);
     });

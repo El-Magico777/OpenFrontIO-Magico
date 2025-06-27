@@ -495,6 +495,91 @@ export class UserSettingModal extends LitElement {
         .value=${this.keybinds["moveRight"] ?? ""}
         @change=${this.handleKeybindChange}
       ></setting-keybind>
+
+      <div class="text-center text-white text-base font-semibold mt-5 mb-2">
+        ${translateText("user_setting.build_controls")}
+      </div>
+
+      <setting-keybind
+        action="buildCity"
+        label=${translateText("user_setting.build_city")}
+        description=${translateText("user_setting.build_city_desc")}
+        defaultKey="Digit1"
+        .value=${this.keybinds["buildCity"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildHarbor"
+        label=${translateText("user_setting.build_harbor")}
+        description=${translateText("user_setting.build_harbor_desc")}
+        defaultKey="Digit2"
+        .value=${this.keybinds["buildHarbor"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildWarship"
+        label=${translateText("user_setting.build_warship")}
+        description=${translateText("user_setting.build_warship_desc")}
+        defaultKey="Digit3"
+        .value=${this.keybinds["buildWarship"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildDefence"
+        label=${translateText("user_setting.build_defence")}
+        description=${translateText("user_setting.build_defence_desc")}
+        defaultKey="Digit4"
+        .value=${this.keybinds["buildDefence"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildSilo"
+        label=${translateText("user_setting.build_silo")}
+        description=${translateText("user_setting.build_silo_desc")}
+        defaultKey="Digit5"
+        .value=${this.keybinds["buildSilo"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildSAM"
+        label=${translateText("user_setting.build_sam")}
+        description=${translateText("user_setting.build_sam_desc")}
+        defaultKey="Digit6"
+        .value=${this.keybinds["buildSAM"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildNuke"
+        label=${translateText("user_setting.build_nuke")}
+        description=${translateText("user_setting.build_nuke_desc")}
+        defaultKey="Digit7"
+        .value=${this.keybinds["buildNuke"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildHyperbomb"
+        label=${translateText("user_setting.build_hyperbomb")}
+        description=${translateText("user_setting.build_hyperbomb_desc")}
+        defaultKey="Digit8"
+        .value=${this.keybinds["buildHyperbomb"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
+
+      <setting-keybind
+        action="buildMIRV"
+        label=${translateText("user_setting.build_mirv")}
+        description=${translateText("user_setting.build_mirv_desc")}
+        defaultKey="Digit9"
+        .value=${this.keybinds["buildMIRV"] ?? ""}
+        @change=${this.handleKeybindChange}
+      ></setting-keybind>
     `;
   }
 

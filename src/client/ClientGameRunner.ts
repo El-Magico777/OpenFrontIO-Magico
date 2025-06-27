@@ -164,15 +164,18 @@ export async function createClientGame(
     `creating private game got difficulty: ${lobbyConfig.gameStartInfo.config.difficulty}`,
   );
 
-  return new ClientGameRunner(
+  const inputHandler = new InputHandler(canvas, eventBus);
+  const runner = new ClientGameRunner(
     lobbyConfig,
     eventBus,
     gameRenderer,
-    new InputHandler(canvas, eventBus),
+    inputHandler,
     transport,
     worker,
     gameView,
   );
+  inputHandler.setClientGameRunner(runner);
+  return runner;
 }
 
 export class ClientGameRunner {
